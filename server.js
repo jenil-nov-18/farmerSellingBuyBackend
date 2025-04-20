@@ -3,21 +3,23 @@ const express = require('express');
 const Razorpay = require('razorpay');
 const cors = require('cors');
 const path = require('path');
-const { Clerk } = require('@clerk/clerk-sdk-node');
+const { requireAuth } = require('@clerk/express'); // Correct the import for Clerk middleware
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Add logging to debug route issues
+// Add debugging logs to identify the problematic route or middleware
 app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
   next();
 });
 
 // Initialize Clerk and Razorpay
-const clerk = new Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
+const clerkMiddleware = requireAuth(); // Replace the old Clerk middleware initialization
+app.use(clerkMiddleware); // Use the Clerk middleware
+
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_SECRET
@@ -204,7 +206,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Add error logging for unhandled routes
+// Add a fallback route to catch unmatched paths
 app.use((req, res, next) => {
   console.error(`Unhandled route: ${req.method} ${req.url}`);
   res.status(404).json({
