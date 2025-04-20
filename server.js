@@ -10,6 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Add logging to debug route issues
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
 // Initialize Clerk and Razorpay
 const clerk = new Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 const razorpay = new Razorpay({
@@ -197,6 +203,15 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../agro-learn-commerce/dist/index.html'));
   });
 }
+
+// Add error logging for unhandled routes
+app.use((req, res, next) => {
+  console.error(`Unhandled route: ${req.method} ${req.url}`);
+  res.status(404).json({
+    error: 'Route not found',
+    code: 'ROUTE_NOT_FOUND'
+  });
+});
 
 // Register error handler
 app.use(errorHandler);
