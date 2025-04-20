@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
     "cors": "^2.8.5",
@@ -17,7 +20,8 @@
     "mongoose": "^8.13.2",
     "nodemon": "^3.1.9",
     "path-to-regexp": "^8.2.0",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "@clerk/express": "^4.0.0"
   },
   "description": ""
 }
