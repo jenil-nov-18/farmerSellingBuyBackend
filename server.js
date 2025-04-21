@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const Razorpay = require('razorpay');
 const cors = require('cors');
@@ -222,5 +221,4 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  
 });
